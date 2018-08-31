@@ -2,10 +2,10 @@
 // Ernesto García A00820783
 // Creado en Fri Aug 24 11:04:54 CDT 2018
 
-#include<iostream>
+#include <iostream>
 using namespace std;
 
-bool isInRange (int initialDay, int finalDay, int initialMonth, int finalMonth, int day, int month)
+bool isInRange(int initialDay, int finalDay, int initialMonth, int finalMonth, int day, int month)
 {
   // Verifico que está dentro de los meses del rango
   if (month >= initialMonth && month <= finalMonth)
@@ -37,7 +37,8 @@ bool isInRange (int initialDay, int finalDay, int initialMonth, int finalMonth, 
     return false;
 }
 
-int main() {
+int main()
+{
   // Declarar variables
   int day = 1;
   int month = 1;
@@ -46,18 +47,18 @@ int main() {
   cin >> day >> month;
 
   // Clasifico los datos
-    // Verifico que sea primavera
-    if(isInRange(21, 21, 3, 6, day, month)) 
-      cout << "PRIMAVERA" << endl;
-    // Si no, verifico que sea verano
-    else if (isInRange(22, 22, 6, 9, day, month))
-      cout << "VERANO" << endl;
-    // Si no, verifico que sea otoño
-    else if (isInRange(23, 21, 9, 12, day, month))
-      cout << "OTOÑO" << endl;
-    // Si no es ninguno, es invierno
-    else
-      cout << "INVIERNO" << endl;
+  // Verifico que sea primavera
+  if (isInRange(21, 21, 3, 6, day, month))
+    cout << "PRIMAVERA" << endl;
+  // Si no, verifico que sea verano
+  else if (isInRange(22, 22, 6, 9, day, month))
+    cout << "VERANO" << endl;
+  // Si no, verifico que sea otoño
+  else if (isInRange(23, 21, 9, 12, day, month))
+    cout << "OTOÑO" << endl;
+  // Si no es ninguno, es invierno
+  else
+    cout << "INVIERNO" << endl;
 
   // Termina el programa
   return 0;
