@@ -8,21 +8,23 @@ using namespace std;
 int main() {
   // Declarar variables
   int num = 0;
+  int rows = 0;
+  int cols = 0;
 
   // Desarrollo de tu programa
   cin >> num;
 
   // Triángulo ascendente
-  for (int k = num; k > 0; k--){
-    for (int l = k; l < num; l++){
+  for (rows = num; rows > 0; rows--){
+    for (cols = rows; cols < num; cols++){
       cout << "*";
     }
     cout << endl;
   }
 
   // Triángulo Descendente
-  for (int i = 0; i < num; i++){
-    for (int j = i; j < num; j++){
+  for (rows = 0; rows < num; rows++){
+    for (cols = rows; cols < num; cols++){
       cout << "*";
     }
     cout << endl;
