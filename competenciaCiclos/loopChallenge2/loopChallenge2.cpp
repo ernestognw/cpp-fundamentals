@@ -5,30 +5,27 @@
 #include<iostream>
 using namespace std;
 
+void minutes(char input, int &minutes){
+  switch(input){
+    case '+':
+      minutes++;
+      cout << minutes;
+    break;
+    case '-':
+      minutes--;
+      cout << minutes;
+    break;
+  }
+}
+
 int main() {
   char value = '+';
-  int timer = 0;
+  int mins = 0;
 
-  cin >> timer;
-  
-  while(value != 'S'){
-    cin >> value;
-
-    if (value != 'S'){
-
-      value == '+' ?
-      timer++ :
-      timer --;
-
-      if (timer >= 60) 
-        timer = 0;
-
-      if (timer < 0) 
-        timer = 59;
-
-      cout << timer << endl;
-    } 
-  };
+  do {
+    cin >> mins;
+  }
+  while(value != 'S');
 
   return 0;
 }
