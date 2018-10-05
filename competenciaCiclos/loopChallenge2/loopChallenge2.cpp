@@ -5,25 +5,42 @@
 #include<iostream>
 using namespace std;
 
-void minutes(char input, int &minutes){
+void validate(int &mins) {
+  if (mins >= 60)
+    mins = 0;
+
+  if (mins < 0)
+    mins = 59;
+  
+  cout << mins << endl;    
+}
+
+void minutes(char input, int &mins){
   switch(input){
     case '+':
-      minutes++;
-      cout << minutes;
+      mins++;
+      validate(mins);
     break;
+
     case '-':
-      minutes--;
-      cout << minutes;
+      mins--;
+      validate(mins);
     break;
+
+    default:
+      return;
   }
 }
 
 int main() {
   char value = '+';
   int mins = 0;
+  
+  cin >> mins;
 
-  do {
-    cin >> mins;
+  do { 
+    cin >> value;
+    minutes(value, mins);
   }
   while(value != 'S');
 
