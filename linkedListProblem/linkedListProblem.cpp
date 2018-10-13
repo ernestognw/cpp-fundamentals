@@ -152,7 +152,6 @@ using namespace std;
     cout<<"\n--------------------------------------------------\n";
     obj.delete_position(4);
     obj.display();
-    cout<<"\n--------------------------------------------------\n";
     system("pause");
     return 0;
   }

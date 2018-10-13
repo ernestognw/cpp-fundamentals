@@ -11,6 +11,8 @@ int main()
   int higher = 0;
   int lower = 0;
 
+  bool first = true;
+
   // Desarrollo de tu programa
   cin >> length;
 
@@ -19,13 +21,15 @@ int main()
   for (int i = 0; i < length; i++)
   {
     cin >> list[i];
-    if (list[i] < lower || lower == 0)
+    if (list[i] < lower) 
     {
       lower = list[i];
+      first = false;
     }
     if (list[i] > higher)
     {
       higher = list[i];
+      first = false;
     }
   }
 
