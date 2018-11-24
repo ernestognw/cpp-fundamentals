@@ -40,54 +40,68 @@ void getInRange(int &toGet, int limInf, int limSup){
 }
 
 // Función de juego con loteria vertical
-bool vertical(vector<vector<char> > marks){
+bool vertical(vector<vector<char> > marks, vector<int> &numbersToWin, vector<vector<int> > board){
   for(int col = 0; col < marks.size(); col++){ // Analiza cada renglón
     bool passed = true;
     for(int row = 0; row < marks[col].size() && passed; row++)
       marks[row][col] != 'X' && (passed = false); // Si algún renglón no está marcado, ese renglón se descarta
-    if(passed)
+    if(passed){
+      for(int row = 0; row < marks[col].size(); row++){
+        numbersToWin.push_back(board[row][col]);
+      }
       return passed; // Si el renglón no se descarta, quiere decir que está lleno, y el usuario ha ganado
+    }
   }
   return false; // Si llega hasta aquí es que ningún renglón pasó la prueba
 }
 
 // Función de juego con loteria horizontal
-bool horizontal(vector<vector<char> > marks){
+bool horizontal(vector<vector<char> > marks, vector<int> &numbersToWin, vector<vector<int> > board){
   for(int row = 0; row < marks.size(); row++){ // Analiza cada columna
     bool passed = true;
     for(int col = 0; col < marks[row].size() && passed; col++)
       marks[row][col] != 'X' && (passed = false); // Si alguna columna no está marcado, esa columna se descarta
-    if(passed)
+    if(passed){
+      for(int col = 0; col < marks[row].size(); col++){
+        numbersToWin.push_back(board[row][col]);
+      }
       return passed; // Si la columna no se descarta, quiere decir que está llena, y el usuario ha ganado
+    }
   }
   return false; // Si llega hasta aquí es que ninguna columna pasó la prueba
 }
 
 // Función de juego con loteria diagonal
-bool diagonal(vector<vector<char> > marks){
+bool diagonal(vector<vector<char> > marks, vector<int> &numbersToWin, vector<vector<int> > board){
   int push = 0; // Variable para indicar columna
   bool passed = true;
 
   for(int row = 0; row < marks.size(); row++){
     marks[row][push] != 'X' && (passed = false); // Si alguna posición de la diagonal no está marcada, esa diagonal no pasa
+    numbersToWin.push_back(board[row][push]);
     push++;
   }
   
   if(passed)
     return passed; // Si la primera diagonal pasó, entonces el jugador ganó
-  
+  numbersToWin.clear();
+
   passed = true; // Si la anterior diagonal no pasó, se prueba la siguiente diagonal
 
   for(int row = 0; row < marks.size(); row++){
     push--;
     marks[row][push] != 'X' && (passed = false);
+    numbersToWin.push_back(board[row][push]);
   }
+
+  if (!passed)
+    numbersToWin.clear();
 
   return passed; // Se retorna el valor de si pasó o no pasó la siguiente diagonal
 }
 
 // Función de juego con loteria de 4 esquinas
-bool fourCorners(vector<vector<char> > marks){
+bool fourCorners(vector<vector<char> > marks, vector<int> &numbersToWin, vector<vector<int> > board){
   int lim = marks.size() - 1; // El límite es el último renglón y/o columna del tablero
   if(marks[0][0] != 'X' || 
      marks[0][lim] != 'X' || 
@@ -95,39 +109,55 @@ bool fourCorners(vector<vector<char> > marks){
      marks[lim][lim] != 'X'){
     return false; // Si cualquiera de las 4 esquinas no está marcada, el jugador no ha ganado 
   }
+
+  numbersToWin.push_back(board[0][0]);
+  numbersToWin.push_back(board[0][lim]);
+  numbersToWin.push_back(board[lim][0]);
+  numbersToWin.push_back(board[lim][lim]);
+
   return true; // Si todas las esquinas están marcadas, el jugador ganó
 }
 
 // Función de juego con loteria por pocito
-bool pocito(vector<vector<char> > marks){
+bool pocito(vector<vector<char> > marks, vector<int> &numbersToWin, vector<vector<int> > board){
   for(int row = 1; row < marks.size() - 1; row++){ // Analiza los renglones de 1 cuadro adentro
     for(int col = 1; col < marks[row].size() - 1; col++){ // Analiza las columnas de 1 cuadro adentro
-      if(marks[row][col] != 'X')
+      if(marks[row][col] != 'X'){
+        numbersToWin.clear();
         return false; // Si algún bloque no está marcado, es que el pocito no está lleno
+      } else {
+        numbersToWin.push_back(board[row][col]);
+      }
     }
   }
   return true; // Si termina la prueba, entonces el pocito está completo
 }
 
 // Función de juego con loteria por cuadro exterior
-bool exteriorSquare(vector<vector<char> > marks){
+bool exteriorSquare(vector<vector<char> > marks, vector<int> &numbersToWin, vector<vector<int> > board){
   bool passed = true;
-  for(int row = 0; row < marks.size() && passed; row++) // Recorre las columnas exteriores
+  for(int row = 0; row < marks.size() && passed; row++){ // Recorre las columnas exteriores
     !(marks[row][0] == 'X' && marks[row][marks.size() - 1] == 'X') && (passed = false); // Si algún valor no está marcado, no pasa la prueba
-  for(int col = 1; col < marks.size() - 1 && passed; col++) // Recorre los renglones exteriores
+    numbersToWin.push_back(board[row][0]);
+  }
+  for(int col = 1; col < marks.size() - 1 && passed; col++){ // Recorre los renglones exteriores
     !(marks[0][col] == 'X' && marks[marks.size() - 1][col] == 'X') && (passed = false); // Si algún valor no está marcado, no pasa la prueba
+    numbersToWin.push_back(board[0][col]);
+  }
+  if(!passed)
+    numbersToWin.clear();
   return passed; // Retorna si pasó o no pasó la prueba
 }
 
 // Función para checar la regla seleccionada, y si el usuario ya ganó
-bool win(vector<vector<char> > marks, int caseToWin){
+bool win(vector<vector<char> > marks, int caseToWin, vector<int> &numbersToWin, vector<vector<int> > board){
   switch(caseToWin){
-    case 1: return vertical(marks); break;
-    case 2: return horizontal(marks); break;
-    case 3: return diagonal(marks); break;
-    case 4: return fourCorners(marks); break;
-    case 5: return pocito(marks); break;
-    case 6: return exteriorSquare(marks); break;
+    case 1: return vertical(marks, numbersToWin, board); break;
+    case 2: return horizontal(marks, numbersToWin, board); break;
+    case 3: return diagonal(marks, numbersToWin, board); break;
+    case 4: return fourCorners(marks, numbersToWin, board); break;
+    case 5: return pocito(marks, numbersToWin, board); break;
+    case 6: return exteriorSquare(marks, numbersToWin, board); break;
     default: return false;
   }
 }
@@ -138,6 +168,14 @@ void markSaid(vector<vector<int> > board, vector<vector<char> > &marks, int toMa
     for(int col = 0; col < board[row].size(); col++)
       board[row][col] == toMark && (marks[row][col] = 'X');
   }
+}
+
+// Función para imprimir tablero
+void printNumbersToWin(vector<int> numbersToWin) {
+  cout << "Tus números son" << endl;
+  for(int row = 0; row < numbersToWin.size(); row++)
+    cout << numbersToWin[row] << " ";
+  cout << endl << endl;
 }
 
 // Función para imprimir tablero
@@ -164,6 +202,7 @@ int main() {
   int caseToWin = 0;                                               // Opción de juego
   vector <vector<int> > board;                                     // Tablero
   vector <vector<char> > marks (rows, vector<char> (cols, ' '));   // Marcas para los números que ya salieron
+  vector<int> numbersToWin;
   map <int, bool> numbersSaid;                                     // Mapa de números dichos
   
   // Desarrollo del juego
@@ -181,7 +220,7 @@ int main() {
   getInRange(caseToWin, 1, 6); // Obtener opción de juego
   printBoard(board, marks);
 
-  while(!win(marks, caseToWin)){
+  while(!win(marks, caseToWin, numbersToWin, board)){
     int number = 0;
     cout << "Teclea la carta que gritaron: ";
     getInRange(number, 1, 54); // Se obtiene el número gritado
@@ -194,6 +233,8 @@ int main() {
       printBoard(board, marks);
     }
   }
+
+  printNumbersToWin(numbersToWin);
 
   cout << "========== ¡LOTERIA! HAS GANADO :) ==========" << endl;
   cout << "=============== ¡FELICIDADES! ===============" << endl;
